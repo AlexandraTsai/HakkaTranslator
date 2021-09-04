@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,10 @@
 		02E0661226E3213F00311D6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02E0661026E3213F00311D6A /* Main.storyboard */; };
 		02E0661426E3214100311D6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02E0661326E3214100311D6A /* Assets.xcassets */; };
 		02E0661726E3214100311D6A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02E0661526E3214100311D6A /* LaunchScreen.storyboard */; };
+		02E0662026E3490700311D6A /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0661F26E3490700311D6A /* Parser.swift */; };
+		02E0662326E34F5100311D6A /* TranslationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0662226E34F5100311D6A /* TranslationViewModel.swift */; };
+		02E0662626E34F7800311D6A /* Translate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0662526E34F7800311D6A /* Translate.swift */; };
+		22B5221CB0E1F93CFAD95F84 /* Pods_HakkaTranslator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DEB4E269D7320DC06A5EC9 /* Pods_HakkaTranslator.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,12 @@
 		02E0661326E3214100311D6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		02E0661626E3214100311D6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		02E0661826E3214100311D6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		02E0661F26E3490700311D6A /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		02E0662226E34F5100311D6A /* TranslationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationViewModel.swift; sourceTree = "<group>"; };
+		02E0662526E34F7800311D6A /* Translate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Translate.swift; sourceTree = "<group>"; };
+		89DEB4E269D7320DC06A5EC9 /* Pods_HakkaTranslator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HakkaTranslator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BD83A05F590321DF7DD9713 /* Pods-HakkaTranslator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HakkaTranslator.release.xcconfig"; path = "Target Support Files/Pods-HakkaTranslator/Pods-HakkaTranslator.release.xcconfig"; sourceTree = "<group>"; };
+		C342D06AB641B41E140F794C /* Pods-HakkaTranslator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HakkaTranslator.debug.xcconfig"; path = "Target Support Files/Pods-HakkaTranslator/Pods-HakkaTranslator.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B5221CB0E1F93CFAD95F84 /* Pods_HakkaTranslator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +53,8 @@
 			children = (
 				02E0660926E3213F00311D6A /* HakkaTranslator */,
 				02E0660826E3213F00311D6A /* Products */,
+				93E19EE743192EDECD1A725F /* Pods */,
+				76F206B8EC011FADDB6B67E8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,6 +69,9 @@
 		02E0660926E3213F00311D6A /* HakkaTranslator */ = {
 			isa = PBXGroup;
 			children = (
+				02E0662426E34F6D00311D6A /* Model */,
+				02E0662126E34F3E00311D6A /* ViewModel */,
+				02E0661E26E348F800311D6A /* Helper */,
 				02E0660A26E3213F00311D6A /* AppDelegate.swift */,
 				02E0660C26E3213F00311D6A /* SceneDelegate.swift */,
 				02E0660E26E3213F00311D6A /* ViewController.swift */,
@@ -67,6 +83,47 @@
 			path = HakkaTranslator;
 			sourceTree = "<group>";
 		};
+		02E0661E26E348F800311D6A /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				02E0661F26E3490700311D6A /* Parser.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		02E0662126E34F3E00311D6A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				02E0662226E34F5100311D6A /* TranslationViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		02E0662426E34F6D00311D6A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				02E0662526E34F7800311D6A /* Translate.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		76F206B8EC011FADDB6B67E8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				89DEB4E269D7320DC06A5EC9 /* Pods_HakkaTranslator.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		93E19EE743192EDECD1A725F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C342D06AB641B41E140F794C /* Pods-HakkaTranslator.debug.xcconfig */,
+				9BD83A05F590321DF7DD9713 /* Pods-HakkaTranslator.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,9 +131,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02E0661B26E3214100311D6A /* Build configuration list for PBXNativeTarget "HakkaTranslator" */;
 			buildPhases = (
+				F0EFFBDB758187894446D68B /* [CP] Check Pods Manifest.lock */,
 				02E0660326E3213F00311D6A /* Sources */,
 				02E0660426E3213F00311D6A /* Frameworks */,
 				02E0660526E3213F00311D6A /* Resources */,
+				7F867F53B13C86356B1D7071 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -132,11 +191,56 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		7F867F53B13C86356B1D7071 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HakkaTranslator/Pods-HakkaTranslator-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HakkaTranslator/Pods-HakkaTranslator-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HakkaTranslator/Pods-HakkaTranslator-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F0EFFBDB758187894446D68B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HakkaTranslator-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		02E0660326E3213F00311D6A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02E0662326E34F5100311D6A /* TranslationViewModel.swift in Sources */,
+				02E0662026E3490700311D6A /* Parser.swift in Sources */,
+				02E0662626E34F7800311D6A /* Translate.swift in Sources */,
 				02E0660F26E3213F00311D6A /* ViewController.swift in Sources */,
 				02E0660B26E3213F00311D6A /* AppDelegate.swift in Sources */,
 				02E0660D26E3213F00311D6A /* SceneDelegate.swift in Sources */,
@@ -283,6 +387,7 @@
 		};
 		02E0661C26E3214100311D6A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C342D06AB641B41E140F794C /* Pods-HakkaTranslator.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -302,6 +407,7 @@
 		};
 		02E0661D26E3214100311D6A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9BD83A05F590321DF7DD9713 /* Pods-HakkaTranslator.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
