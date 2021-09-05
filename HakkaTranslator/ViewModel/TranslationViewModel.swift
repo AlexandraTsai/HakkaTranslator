@@ -17,7 +17,6 @@ protocol TranslationViewModelInput: AnyObject {
 }
 
 protocol TranslationViewModelOutput: AnyObject {
-    var speakingText: String { get }
     var chinese: BehaviorRelay<String?> { get }
     var hakka: BehaviorRelay<String?> { get }
     var micEnable: BehaviorRelay<Bool> { get }
@@ -26,7 +25,6 @@ protocol TranslationViewModelOutput: AnyObject {
 typealias TranslationViewModelProtocol = TranslationViewModelInput & TranslationViewModelOutput
 
 class TranslationViewModel: TranslationViewModelProtocol {
-    let speakingText = "Say something, I'm listening!"
     let chinese = BehaviorRelay<String?>(value: nil)
     let hakka = BehaviorRelay<String?>(value: nil)
     let micEnable = BehaviorRelay<Bool>(value: true)
@@ -78,6 +76,8 @@ class TranslationViewModel: TranslationViewModelProtocol {
 private extension TranslationViewModel {
     func binding() {
         chinese
+            .distinctUntilChanged()
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] text in
                 guard let self = self,
                       let text = text else {
