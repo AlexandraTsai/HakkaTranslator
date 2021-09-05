@@ -14,6 +14,7 @@ import PromiseKit
 protocol TranslationViewModelInput: AnyObject {
     func startRecording()
     func endRecording()
+    func translate(_ text: String)
 }
 
 protocol TranslationViewModelOutput: AnyObject {
@@ -58,6 +59,18 @@ class TranslationViewModel: TranslationViewModelProtocol {
         recognitionTask?.cancel()
         recognitionTask = nil
         micEnable.accept(true)
+    }
+
+    func translate(_ text: String) {
+        chinese.accept(text)
+        guard !text.isEmpty else { return }
+        Parser.translate(text)
+            .done { translation in
+                self.hakka.accept(translation)
+            }
+            .catch { _ in
+                self.hakka.accept("找不到符合的翻譯")
+            }
     }
 
     init(delegate: SFSpeechRecognizerDelegate) {

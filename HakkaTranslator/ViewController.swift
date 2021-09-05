@@ -54,6 +54,13 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
+    private let textInputBtn = UIButton() --> {
+        $0.setImage(#imageLiteral(resourceName: "enter_text").withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.tintColor = .white
+        $0.backgroundColor = .darkGray
+        $0.layer.cornerRadius = 25
+    }
+    private let textInput = UITextField() //Not visible on the UI
     private var viewModel: TranslationViewModelProtocol?
     private let disposeBag = DisposeBag()
 }
@@ -61,7 +68,7 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 // MARK: Setup UI
 private extension ViewController {
     func setupUI() {
-        [titleLabel, chineseContainer, hakkaContainer, micButton].forEach { view.addSubview($0) }
+        [titleLabel, chineseContainer, hakkaContainer, micButton, textInputBtn].forEach { view.addSubview($0) }
 
         titleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -79,9 +86,14 @@ private extension ViewController {
         micButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
-            $0.width.equalTo(80)
-            $0.height.equalTo(80)
+            $0.width.height.equalTo(80)
         }
+        textInputBtn.snp.makeConstraints {
+            $0.width.height.equalTo(50)
+            $0.bottom.equalTo(micButton)
+            $0.right.equalToSuperview().inset(30)
+        }
+        view.addSubview(textInput)
         setupChineseView()
         setupHakkaView()
     }
@@ -148,7 +160,7 @@ private extension ViewController {
             .disposed(by: disposeBag)
 
         viewModel.chinese
-            .map { $0 == nil }
+            .map { $0?.isEmpty ?? true }
             .bind(to: chineseContainer.rx.isHidden)
             .disposed(by: disposeBag)
 
@@ -157,9 +169,21 @@ private extension ViewController {
             .disposed(by: disposeBag)
 
         viewModel.hakka
-            .map { $0 == nil }
+            .map { $0?.isEmpty ?? true }
             .bind(to: hakkaContainer.rx.isHidden)
             .disposed(by: disposeBag)
+
+        textInputBtn.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { [weak textInput] _ in
+                textInput?.becomeFirstResponder()
+            }).disposed(by: disposeBag)
+
+        textInput.rx.text
+            .compactMap { $0 }
+            .subscribe(onNext: { [weak viewModel] text in
+                viewModel?.translate(text)
+            }).disposed(by: disposeBag)
 
         micButton.rx.anyGesture(.longPress())
             .subscribe(onNext: { [weak self] gesture in
@@ -178,9 +202,12 @@ private extension ViewController {
                 default: break
                 }
             }).disposed(by: disposeBag)
+
+        view.rx.tapGesture()
+            .subscribe(onNext: { [weak view] _ in
+                view?.endEditing(true)
+            }).disposed(by: disposeBag)
     }
-
-
 }
 
 infix operator -->
