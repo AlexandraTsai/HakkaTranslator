@@ -17,6 +17,8 @@
 		02E0662326E34F5100311D6A /* TranslationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0662226E34F5100311D6A /* TranslationViewModel.swift */; };
 		02E0662626E34F7800311D6A /* Translate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0662526E34F7800311D6A /* Translate.swift */; };
 		22B5221CB0E1F93CFAD95F84 /* Pods_HakkaTranslator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DEB4E269D7320DC06A5EC9 /* Pods_HakkaTranslator.framework */; };
+		A81A9C2826E50A9500F182B5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81A9C2726E50A9500F182B5 /* UIColor+Extension.swift */; };
+		A81A9C2A26E50AB400F182B5 /* CAShapeLayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81A9C2926E50AB400F182B5 /* CAShapeLayer+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		02E0662526E34F7800311D6A /* Translate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Translate.swift; sourceTree = "<group>"; };
 		89DEB4E269D7320DC06A5EC9 /* Pods_HakkaTranslator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HakkaTranslator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BD83A05F590321DF7DD9713 /* Pods-HakkaTranslator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HakkaTranslator.release.xcconfig"; path = "Target Support Files/Pods-HakkaTranslator/Pods-HakkaTranslator.release.xcconfig"; sourceTree = "<group>"; };
+		A81A9C2726E50A9500F182B5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		A81A9C2926E50AB400F182B5 /* CAShapeLayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAShapeLayer+Extension.swift"; sourceTree = "<group>"; };
 		C342D06AB641B41E140F794C /* Pods-HakkaTranslator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HakkaTranslator.debug.xcconfig"; path = "Target Support Files/Pods-HakkaTranslator/Pods-HakkaTranslator.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,6 +73,7 @@
 		02E0660926E3213F00311D6A /* HakkaTranslator */ = {
 			isa = PBXGroup;
 			children = (
+				A81A9C2626E50A7D00F182B5 /* Extension */,
 				02E0662426E34F6D00311D6A /* Model */,
 				02E0662126E34F3E00311D6A /* ViewModel */,
 				02E0661E26E348F800311D6A /* Helper */,
@@ -122,6 +127,15 @@
 				9BD83A05F590321DF7DD9713 /* Pods-HakkaTranslator.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		A81A9C2626E50A7D00F182B5 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				A81A9C2726E50A9500F182B5 /* UIColor+Extension.swift */,
+				A81A9C2926E50AB400F182B5 /* CAShapeLayer+Extension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -238,6 +252,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A81A9C2826E50A9500F182B5 /* UIColor+Extension.swift in Sources */,
+				A81A9C2A26E50AB400F182B5 /* CAShapeLayer+Extension.swift in Sources */,
 				02E0662326E34F5100311D6A /* TranslationViewModel.swift in Sources */,
 				02E0662026E3490700311D6A /* Parser.swift in Sources */,
 				02E0662626E34F7800311D6A /* Translate.swift in Sources */,

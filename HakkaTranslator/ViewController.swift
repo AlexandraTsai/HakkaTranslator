@@ -22,19 +22,39 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        [chineseContainer, hakkaContainer].forEach {
+            addBackground(for: $0.frame)
+            view.bringSubviewToFront($0)
+        }
         setupPulsatingLayer()
+        let beth = UIBezierPath()
+        let frame = chineseIcon.frame
+        let startPoint = CGPoint(x: frame.midX, y: frame.minY)
+        beth.move(to: startPoint)
+        beth.addQuadCurve(to: .init(x: frame.maxX, y: frame.midY), controlPoint: .init(x: frame.midX + 8, y: frame.midY - 10))
+        beth.addQuadCurve(to: .init(x: frame.midX, y: frame.maxY), controlPoint: .init(x: frame.midX + 5, y: frame.midY + 8))
+        beth.addQuadCurve(to: .init(x: frame.minX, y: frame.midY), controlPoint: .init(x: frame.midX + 5, y: frame.midY - 10))
+        beth.addQuadCurve(to: startPoint, controlPoint: .init(x: frame.midX - 8, y: frame.midY - 10))
+        beth.close()
+
+        let layer = CAShapeLayer()
+        layer.path = beth.cgPath
+        layer.fillColor = UIColor.red.cgColor
+        view.layer.addSublayer(layer)
+//        addBackground(for: chineseIcon.frame)
+//        chineseIcon.layer.mask = layer
     }
 
     private let titleLabel = UILabel() --> {
-        $0.font = UIFont.systemFont(ofSize: 16)
-        $0.textColor = UIColor.lightGray
+        $0.font = UIFont.systemFont(ofSize: 20)
+        $0.textColor = UIColor(hex: "414D4D")
         $0.text = "Listening..."
         $0.isHidden = true
     }
     private let micButton = UIButton() --> {
         $0.setImage(#imageLiteral(resourceName: "microphone").withRenderingMode(.alwaysTemplate), for: .normal)
         $0.tintColor = .white
-        $0.backgroundColor = .purple
+        $0.backgroundColor = Constant.buttonColor
         $0.layer.cornerRadius = 40
         $0.imageEdgeInsets = .init(top: 20, left: 20, bottom: 20, right: 20)
     }
@@ -42,15 +62,16 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
     private let bigPulsatingLayer = CAShapeLayer()
     private let chineseContainer = UIView()
     private let hakkaContainer = UIView()
+    private let chineseIcon = UIImageView(image: #imageLiteral(resourceName: "chinese_icon").withRenderingMode(.alwaysTemplate))
     private let chineseLabel = UILabel() --> {
-        $0.font = .boldSystemFont(ofSize: 22)
-        $0.textColor = .white
+        $0.font = .boldSystemFont(ofSize: 25)
+        $0.textColor = Constant.labelColor
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
     private let hakkaLabel = UILabel() --> {
-        $0.font = .boldSystemFont(ofSize: 22)
-        $0.textColor = .white
+        $0.font = .boldSystemFont(ofSize: 25)
+        $0.textColor = Constant.labelColor
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
@@ -68,24 +89,30 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 // MARK: Setup UI
 private extension ViewController {
     func setupUI() {
-        [titleLabel, chineseContainer, hakkaContainer, micButton, textInputBtn].forEach { view.addSubview($0) }
+        let bg = UIImageView(image: #imageLiteral(resourceName: "background"))
+        bg.contentMode = .scaleAspectFill
 
+        [bg, titleLabel, chineseContainer, hakkaContainer, micButton, textInputBtn].forEach { view.addSubview($0) }
+        bg.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
         titleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
         }
         chineseContainer.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom)
-            $0.bottom.equalTo(view.snp.centerY)
-            $0.left.right.equalToSuperview()
+            $0.height.equalTo(view.snp.height).multipliedBy(200.0 / 896.0)
+            $0.bottom.equalTo(view.snp.centerY).offset(-50)
+            $0.left.right.equalToSuperview().inset(50)
         }
         hakkaContainer.snp.makeConstraints {
-            $0.bottom.left.right.equalToSuperview()
-            $0.top.equalTo(view.snp.centerY)
+            $0.height.equalTo(chineseContainer)
+            $0.bottom.equalTo(micButton.snp.top).offset(-50)
+            $0.left.right.equalToSuperview().inset(50)
         }
         micButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-10)
             $0.width.height.equalTo(80)
         }
         textInputBtn.snp.makeConstraints {
@@ -98,6 +125,21 @@ private extension ViewController {
         setupHakkaView()
     }
 
+    func addBackground(for frame: CGRect) {
+        let path = UIBezierPath()
+        path.move(to: frame.origin)
+        path.addQuadCurve(to: CGPoint(x: frame.maxX, y: frame.minY), controlPoint: CGPoint(x: frame.maxX - 50, y: frame.minY - 30))
+        path.addQuadCurve(to: CGPoint(x: frame.maxX - 3, y: frame.maxY), controlPoint: CGPoint(x: frame.maxX - 10, y: frame.maxY - 10))
+        path.addQuadCurve(to: CGPoint(x: frame.minX + 5, y: frame.maxY - 10), controlPoint: CGPoint(x: frame.minX + 40, y: frame.maxY + 8))
+        path.addQuadCurve(to: CGPoint(x: frame.minX, y: frame.minY), controlPoint: CGPoint(x: frame.minX - 5, y: frame.minY + 30))
+        path.close()
+
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.path = path.cgPath
+        shapeLayer.fillColor = UIColor.white.cgColor
+        view.layer.addSublayer(shapeLayer)
+    }
+
     func setupPulsatingLayer() {
         let bezier = UIBezierPath(arcCenter: .zero, radius: 40, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
         [pulsatingLayer, bigPulsatingLayer].forEach {
@@ -106,29 +148,29 @@ private extension ViewController {
             $0.position = micButton.center
             view.layer.addSublayer($0)
         }
-        pulsatingLayer.fillColor = UIColor.purple.withAlphaComponent(0.8).cgColor
-        bigPulsatingLayer.fillColor = UIColor.purple.withAlphaComponent(0.6).cgColor
+        pulsatingLayer.fillColor = Constant.btnLayer1Color.withAlphaComponent(0.8).cgColor
+        bigPulsatingLayer.fillColor = Constant.btnLayer2Color.withAlphaComponent(0.6).cgColor
         view.layer.addSublayer(bigPulsatingLayer)
         view.bringSubviewToFront(micButton)
     }
 
     func setupChineseView() {
-        let image = UIImageView(image: #imageLiteral(resourceName: "chinese_icon").withRenderingMode(.alwaysTemplate))
-        image.tintColor = .blue
-        image.layer.cornerRadius = 25
-        image.clipsToBounds = true
-        chineseContainer.addSubview(image)
+        chineseIcon.tintColor = .blue
+        chineseIcon.backgroundColor = .black
+//        chineseIcon.layer.cornerRadius = 25
+//        chineseIcon.clipsToBounds = true
+        chineseContainer.addSubview(chineseIcon)
         chineseContainer.addSubview(chineseLabel)
-        image.snp.makeConstraints {
-            $0.top.greaterThanOrEqualToSuperview().offset(30)
+        chineseIcon.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(-25)
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(50)
         }
         chineseLabel.snp.makeConstraints {
-            $0.top.equalTo(image.snp.bottom).offset(20)
             $0.centerX.equalToSuperview()
-            $0.left.right.equalToSuperview().inset(30)
-            $0.bottom.equalToSuperview().inset(50)
+            $0.left.right.equalToSuperview().inset(10)
+            $0.bottom.lessThanOrEqualToSuperview()
+            $0.height.greaterThanOrEqualToSuperview()
         }
     }
 
@@ -139,15 +181,15 @@ private extension ViewController {
         hakkaContainer.addSubview(image)
         hakkaContainer.addSubview(hakkaLabel)
         image.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().offset(-25)
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(50)
         }
         hakkaLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(image.snp.bottom).offset(20)
-            $0.left.right.equalToSuperview().inset(30)
+            $0.left.right.equalToSuperview().inset(10)
             $0.bottom.lessThanOrEqualToSuperview()
+            $0.height.greaterThanOrEqualToSuperview()
         }
     }
 
@@ -161,7 +203,7 @@ private extension ViewController {
 
         viewModel.chinese
             .map { $0?.isEmpty ?? true }
-            .bind(to: chineseContainer.rx.isHidden)
+            .bind(to: chineseLabel.rx.isHidden)
             .disposed(by: disposeBag)
 
         viewModel.hakka
@@ -170,7 +212,7 @@ private extension ViewController {
 
         viewModel.hakka
             .map { $0?.isEmpty ?? true }
-            .bind(to: hakkaContainer.rx.isHidden)
+            .bind(to: hakkaLabel.rx.isHidden)
             .disposed(by: disposeBag)
 
         textInputBtn.rx.tapGesture()
@@ -216,14 +258,9 @@ func --> <T>(object: T, closure: (T) -> Void) -> T {
     return object
 }
 
-extension CAShapeLayer {
-    func addPulsing(toValue: Any, forKey: String) {
-        let animation = CABasicAnimation(keyPath: "transform.scale")
-        animation.toValue = toValue
-        animation.duration = 0.8
-        animation.repeatCount = .infinity
-        animation.timingFunction = .init(name: .easeInEaseOut)
-        animation.autoreverses = true
-        add(animation, forKey: forKey)
-    }
+enum Constant {
+    static let buttonColor = UIColor(hex: "57FDFD")
+    static let btnLayer1Color = UIColor(hex: "4BF4F4")
+    static let btnLayer2Color = UIColor(hex: "50E4E4")
+    static let labelColor = UIColor(hex: "606666")
 }
