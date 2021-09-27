@@ -23,26 +23,10 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         [chineseContainer, hakkaContainer].forEach {
-            addBackground(for: $0.frame)
+            addCardStyleBackground(for: $0.frame)
             view.bringSubviewToFront($0)
         }
         setupPulsatingLayer()
-        let beth = UIBezierPath()
-        let frame = chineseIcon.frame
-        let startPoint = CGPoint(x: frame.midX, y: frame.minY)
-        beth.move(to: startPoint)
-        beth.addQuadCurve(to: .init(x: frame.maxX, y: frame.midY), controlPoint: .init(x: frame.midX + 8, y: frame.midY - 10))
-        beth.addQuadCurve(to: .init(x: frame.midX, y: frame.maxY), controlPoint: .init(x: frame.midX + 5, y: frame.midY + 8))
-        beth.addQuadCurve(to: .init(x: frame.minX, y: frame.midY), controlPoint: .init(x: frame.midX + 5, y: frame.midY - 10))
-        beth.addQuadCurve(to: startPoint, controlPoint: .init(x: frame.midX - 8, y: frame.midY - 10))
-        beth.close()
-
-        let layer = CAShapeLayer()
-        layer.path = beth.cgPath
-        layer.fillColor = UIColor.red.cgColor
-        view.layer.addSublayer(layer)
-//        addBackground(for: chineseIcon.frame)
-//        chineseIcon.layer.mask = layer
     }
 
     private let titleLabel = UILabel() --> {
@@ -62,7 +46,10 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
     private let bigPulsatingLayer = CAShapeLayer()
     private let chineseContainer = UIView()
     private let hakkaContainer = UIView()
-    private let chineseIcon = UIImageView(image: #imageLiteral(resourceName: "chinese_icon").withRenderingMode(.alwaysTemplate))
+    private let playButton = UIButton() --> {
+        $0.setImage(#imageLiteral(resourceName: "play-button"), for: .normal)
+        $0.clipsToBounds = true
+    }
     private let chineseLabel = UILabel() --> {
         $0.font = .boldSystemFont(ofSize: 25)
         $0.textColor = Constant.labelColor
@@ -125,21 +112,6 @@ private extension ViewController {
         setupHakkaView()
     }
 
-    func addBackground(for frame: CGRect) {
-        let path = UIBezierPath()
-        path.move(to: frame.origin)
-        path.addQuadCurve(to: CGPoint(x: frame.maxX, y: frame.minY), controlPoint: CGPoint(x: frame.maxX - 50, y: frame.minY - 30))
-        path.addQuadCurve(to: CGPoint(x: frame.maxX - 3, y: frame.maxY), controlPoint: CGPoint(x: frame.maxX - 10, y: frame.maxY - 10))
-        path.addQuadCurve(to: CGPoint(x: frame.minX + 5, y: frame.maxY - 10), controlPoint: CGPoint(x: frame.minX + 40, y: frame.maxY + 8))
-        path.addQuadCurve(to: CGPoint(x: frame.minX, y: frame.minY), controlPoint: CGPoint(x: frame.minX - 5, y: frame.minY + 30))
-        path.close()
-
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.path = path.cgPath
-        shapeLayer.fillColor = UIColor.white.cgColor
-        view.layer.addSublayer(shapeLayer)
-    }
-
     func setupPulsatingLayer() {
         let bezier = UIBezierPath(arcCenter: .zero, radius: 40, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
         [pulsatingLayer, bigPulsatingLayer].forEach {
@@ -155,16 +127,18 @@ private extension ViewController {
     }
 
     func setupChineseView() {
-        chineseIcon.tintColor = .blue
-        chineseIcon.backgroundColor = .black
-//        chineseIcon.layer.cornerRadius = 25
-//        chineseIcon.clipsToBounds = true
+        let chineseIcon = UIImageView(image: #imageLiteral(resourceName: "dumpling").resize(to: .init(width: 30, height: 30)).withRenderingMode(.alwaysTemplate))
+        chineseIcon.backgroundColor = UIColor(hex: "#414D4D")
+        chineseIcon.layer.cornerRadius = 35
+        chineseIcon.clipsToBounds = true
+        chineseIcon.tintColor = .white
+        chineseIcon.contentMode = .center
         chineseContainer.addSubview(chineseIcon)
         chineseContainer.addSubview(chineseLabel)
         chineseIcon.snp.makeConstraints {
             $0.top.equalToSuperview().offset(-25)
             $0.centerX.equalToSuperview()
-            $0.width.height.equalTo(50)
+            $0.width.height.equalTo(70)
         }
         chineseLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -175,21 +149,27 @@ private extension ViewController {
     }
 
     func setupHakkaView() {
-        let image = UIImageView(image: #imageLiteral(resourceName: "hakka_symbol"))
-        image.layer.cornerRadius = 25
+        let image = UIImageView(image: #imageLiteral(resourceName: "flowers"))
+        image.layer.cornerRadius = 35
+        image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         hakkaContainer.addSubview(image)
         hakkaContainer.addSubview(hakkaLabel)
+        hakkaContainer.addSubview(playButton)
         image.snp.makeConstraints {
             $0.top.equalToSuperview().offset(-25)
             $0.centerX.equalToSuperview()
-            $0.width.height.equalTo(50)
+            $0.width.height.equalTo(70)
         }
         hakkaLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.left.right.equalToSuperview().inset(10)
             $0.bottom.lessThanOrEqualToSuperview()
             $0.height.greaterThanOrEqualToSuperview()
+        }
+        playButton.snp.makeConstraints {
+            $0.height.width.equalTo(50)
+            $0.bottom.right.equalToSuperview().inset(10)
         }
     }
 
@@ -245,10 +225,32 @@ private extension ViewController {
                 }
             }).disposed(by: disposeBag)
 
+        playButton.rx.tapGesture()
+            .subscribe(onNext: { [weak viewModel] _ in
+                viewModel?.speak()
+            }).disposed(by: disposeBag)
+
         view.rx.tapGesture()
             .subscribe(onNext: { [weak view] _ in
                 view?.endEditing(true)
             }).disposed(by: disposeBag)
+    }
+}
+
+private extension ViewController {
+    func addCardStyleBackground(for frame: CGRect) {
+        let path = UIBezierPath()
+        path.move(to: frame.origin)
+        path.addQuadCurve(to: CGPoint(x: frame.maxX, y: frame.minY), controlPoint: CGPoint(x: frame.maxX - 50, y: frame.minY - 30))
+        path.addQuadCurve(to: CGPoint(x: frame.maxX - 3, y: frame.maxY), controlPoint: CGPoint(x: frame.maxX - 10, y: frame.maxY - 10))
+        path.addQuadCurve(to: CGPoint(x: frame.minX + 5, y: frame.maxY - 10), controlPoint: CGPoint(x: frame.minX + 40, y: frame.maxY + 8))
+        path.addQuadCurve(to: CGPoint(x: frame.minX, y: frame.minY), controlPoint: CGPoint(x: frame.minX - 5, y: frame.minY + 30))
+        path.close()
+
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.path = path.cgPath
+        shapeLayer.fillColor = UIColor.white.cgColor
+        view.layer.addSublayer(shapeLayer)
     }
 }
 

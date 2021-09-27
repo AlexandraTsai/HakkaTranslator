@@ -7,6 +7,18 @@
 
 import Foundation
 
+struct HakkaWord: Decodable {
+    let success: Bool
+    let message: String
+    let hakka: String
+
+    enum CodingKeys: String, CodingKey {
+        case success = "success"
+        case message = "message"
+        case hakka = "zh_ha"
+    }
+}
+
 struct Translate: Decodable {
     let participle: String
     let complex: [Complex]

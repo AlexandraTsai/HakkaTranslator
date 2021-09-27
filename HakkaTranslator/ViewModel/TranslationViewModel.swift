@@ -15,6 +15,7 @@ protocol TranslationViewModelInput: AnyObject {
     func startRecording()
     func endRecording()
     func translate(_ text: String)
+    func speak()
 }
 
 protocol TranslationViewModelOutput: AnyObject {
@@ -63,14 +64,13 @@ class TranslationViewModel: TranslationViewModelProtocol {
 
     func translate(_ text: String) {
         chinese.accept(text)
-        guard !text.isEmpty else { return }
-        Parser.translate(text)
-            .done { translation in
-                self.hakka.accept(translation)
-            }
-            .catch { _ in
-                self.hakka.accept("找不到符合的翻譯")
-            }
+    }
+
+    func speak() {
+        guard let hakka = hakka.value else {
+            return
+        }
+        Parser.shared.speak(hakka)
     }
 
     init(delegate: SFSpeechRecognizerDelegate) {
@@ -97,13 +97,13 @@ private extension TranslationViewModel {
                     self?.hakka.accept(nil)
                     return
                 }
-                Parser.translate(text)
+                Parser.shared.translate(text)
                     .done { translation in
                         self.hakka.accept(translation)
                     }
                     .catch { _ in
                         self.hakka.accept("找不到符合的翻譯")
-                    }
+                    }   
             }).disposed(by: disposeBag)
     }
 
