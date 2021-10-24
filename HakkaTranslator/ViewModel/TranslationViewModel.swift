@@ -16,6 +16,7 @@ protocol TranslationViewModelInput: AnyObject {
     func endRecording()
     func translate(_ text: String)
     func speak()
+    func clearAll()
 }
 
 protocol TranslationViewModelOutput: AnyObject {
@@ -71,6 +72,10 @@ class TranslationViewModel: TranslationViewModelProtocol {
             return
         }
         Parser.shared.speak(hakka)
+    }
+
+    func clearAll() {
+        chinese.accept(nil)
     }
 
     init(delegate: SFSpeechRecognizerDelegate) {
