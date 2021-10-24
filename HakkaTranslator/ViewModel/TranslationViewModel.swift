@@ -93,7 +93,8 @@ private extension TranslationViewModel {
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] text in
                 guard let self = self,
-                      let text = text else {
+                      let text = text,
+                      !text.isEmpty else {
                     self?.hakka.accept(nil)
                     return
                 }
